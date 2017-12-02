@@ -22,16 +22,31 @@
  * IN THE SOFTWARE.
  */
 
-#include <QApplication>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include "mainwindow.h"
+#include <QMainWindow>
 
-int main(int argc, char **argv)
+#include <win32pe/file.h>
+
+class MainWindow : public QMainWindow
 {
-    QApplication a(argc, argv);
+    Q_OBJECT
 
-    MainWindow mainWindow;
-    mainWindow.show();
+public:
 
-    return a.exec();
-}
+    MainWindow();
+    virtual ~MainWindow();
+
+    void openFile(const QString &filename);
+
+private slots:
+
+    void onOpenClicked();
+
+private:
+
+    win32pe::File *mFile;
+};
+
+#endif // MAINWINDOW_H

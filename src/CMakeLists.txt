@@ -1,5 +1,6 @@
 set(SRC
     main.cpp
+    mainwindow.cpp
 )
 
 add_executable(pedeconstructor WIN32 ${SRC})

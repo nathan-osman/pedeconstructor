@@ -23,15 +23,60 @@
  */
 
 #include <QApplication>
+#include <QDir>
+#include <QFileDialog>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 
-int main(int argc, char **argv)
+MainWindow::MainWindow()
+    : mFile(nullptr)
 {
-    QApplication a(argc, argv);
+    setWindowTitle(tr("PE Deconstructor"));
 
-    MainWindow mainWindow;
-    mainWindow.show();
+    QMenu *file = menuBar()->addMenu(tr("&File"));
+    file->addAction(tr("&Open"), this, &MainWindow::onOpenClicked);
+    file->addSeparator();
+    file->addAction(tr("&Quit"), QApplication::instance(), &QApplication::quit);
+}
 
-    return a.exec();
+MainWindow::~MainWindow()
+{
+    if (mFile) {
+        delete mFile;
+    }
+}
+
+void MainWindow::openFile(const QString &filename)
+{
+    if (mFile) {
+        delete mFile;
+    }
+
+    mFile = new win32pe::File;
+
+    if (!mFile->load(filename.toStdString())) {
+        QMessageBox::critical(
+            this,
+            tr("Error"),
+            tr("An error has occurred: %1").arg(QString::fromStdString(mFile->errorString()))
+        );
+        return;
+    }
+}
+
+void MainWindow::onOpenClicked()
+{
+    QString filename = QFileDialog::getOpenFileName(
+        this,
+        tr("Select File"),
+        QDir::homePath(),
+        QString("PE files (*.exe *.dll);;All files (*.*)")
+    );
+
+    if (!filename.isNull()) {
+        openFile(filename);
+    }
 }
