@@ -1,6 +1,9 @@
 set(SRC
+    generalwidget.cpp
+    importswidget.cpp
     main.cpp
     mainwindow.cpp
+    sectionswidget.cpp
 )
 
 add_executable(pedeconstructor WIN32 ${SRC})
