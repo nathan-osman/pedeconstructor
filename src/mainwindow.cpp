@@ -22,12 +22,16 @@
  * IN THE SOFTWARE.
  */
 
+#include <QAction>
 #include <QApplication>
 #include <QDir>
 #include <QFileDialog>
+#include <QIcon>
+#include <QKeySequence>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QToolBar>
 
 #include "mainwindow.h"
 
@@ -36,10 +40,17 @@ MainWindow::MainWindow()
 {
     setWindowTitle(tr("PE Deconstructor"));
 
+    QAction *open = new QAction(QIcon::fromTheme("document-open"), tr("&Open"), this);
+    open->setShortcut(QKeySequence::Open);
+    connect(open, &QAction::triggered, this, &MainWindow::onOpenClicked);
+
     QMenu *file = menuBar()->addMenu(tr("&File"));
-    file->addAction(tr("&Open"), this, &MainWindow::onOpenClicked);
+    file->addAction(open);
     file->addSeparator();
     file->addAction(tr("&Quit"), QApplication::instance(), &QApplication::quit);
+
+    QToolBar *toolbar = addToolBar(tr("File"));
+    toolbar->addAction(open);
 }
 
 MainWindow::~MainWindow()
