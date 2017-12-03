@@ -25,7 +25,11 @@
 #ifndef GENERALWIDGET_H
 #define GENERALWIDGET_H
 
+#include <QCheckBox>
+#include <QLabel>
 #include <QWidget>
+
+#include <win32pe/file.h>
 
 class GeneralWidget : public QWidget
 {
@@ -33,7 +37,27 @@ class GeneralWidget : public QWidget
 
 public:
 
-    //...
+    GeneralWidget();
+
+    void update(win32pe::File *file);
+
+private:
+
+    QLabel *mMachine;
+    QLabel *mTimestamp;
+
+    QCheckBox *mRelocsStripped;
+    QCheckBox *mExecutableImage;
+    QCheckBox *mLineNumsStripped;
+    QCheckBox *mLocalSymsStripped;
+    QCheckBox *mLargeAddressAware;
+    QCheckBox *mThirtyTwoBitMachine;
+    QCheckBox *mDebugStripped;
+    QCheckBox *mRemovableRunFromSwap;
+    QCheckBox *mNetRunFromSwap;
+    QCheckBox *mSystem;
+    QCheckBox *mDLL;
+    QCheckBox *mUPSystemOnly;
 };
 
 #endif // GENERALWIDGET_H

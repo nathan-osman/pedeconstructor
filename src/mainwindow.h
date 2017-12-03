@@ -29,6 +29,10 @@
 
 #include <win32pe/file.h>
 
+#include "generalwidget.h"
+#include "importswidget.h"
+#include "sectionswidget.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -47,6 +51,10 @@ private slots:
 private:
 
     win32pe::File *mFile;
+
+    GeneralWidget *mGeneralWidget;
+    SectionsWidget *mSectionsWidget;
+    ImportsWidget *mImportsWidget;
 };
 
 #endif // MAINWINDOW_H

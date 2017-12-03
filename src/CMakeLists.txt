@@ -1,8 +1,12 @@
 set(SRC
+    generalwidget.h
     generalwidget.cpp
+    importswidget.h
     importswidget.cpp
     main.cpp
+    mainwindow.h
     mainwindow.cpp
+    sectionswidget.h
     sectionswidget.cpp
 )
 

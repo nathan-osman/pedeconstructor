@@ -22,4 +22,86 @@
  * IN THE SOFTWARE.
  */
 
+#include <QDateTime>
+#include <QGridLayout>
+#include <QSpacerItem>
+#include <QVBoxLayout>
+
+#include <win32pe/fileheader.h>
+
 #include "generalwidget.h"
+
+GeneralWidget::GeneralWidget()
+    : mMachine(new QLabel),
+      mTimestamp(new QLabel),
+      mRelocsStripped(new QCheckBox(tr("Relocation information stripped"))),
+      mExecutableImage(new QCheckBox(tr("File is executable"))),
+      mLineNumsStripped(new QCheckBox(tr("Line numbers stripped"))),
+      mLocalSymsStripped(new QCheckBox(tr("Symbol table entries stripped"))),
+      mLargeAddressAware(new QCheckBox(tr("Large address aware"))),
+      mThirtyTwoBitMachine(new QCheckBox(tr("32-bit words"))),
+      mDebugStripped(new QCheckBox(tr("Debug information stripped"))),
+      mRemovableRunFromSwap(new QCheckBox(tr("Copy to swap when run from removable media"))),
+      mNetRunFromSwap(new QCheckBox(tr("Copy to swap when run from the network"))),
+      mSystem(new QCheckBox(tr("System file"))),
+      mDLL(new QCheckBox(tr("Image is a DLL"))),
+      mUPSystemOnly(new QCheckBox(tr("Run on uniprocessor system")))
+{
+    QGridLayout *gridLayout = new QGridLayout;
+    gridLayout->addWidget(new QLabel(tr("Machine:")), 0, 0);
+    gridLayout->addWidget(mMachine, 0, 1);
+    gridLayout->addWidget(new QLabel(tr("Timestamp:")), 1, 0);
+    gridLayout->addWidget(mTimestamp, 1, 1);
+    gridLayout->setColumnStretch(1, 1);
+
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    vboxLayout->addLayout(gridLayout);
+    vboxLayout->addWidget(mRelocsStripped);
+    vboxLayout->addWidget(mExecutableImage);
+    vboxLayout->addWidget(mLineNumsStripped);
+    vboxLayout->addWidget(mLocalSymsStripped);
+    vboxLayout->addWidget(mLargeAddressAware);
+    vboxLayout->addWidget(mThirtyTwoBitMachine);
+    vboxLayout->addWidget(mDebugStripped);
+    vboxLayout->addWidget(mRemovableRunFromSwap);
+    vboxLayout->addWidget(mNetRunFromSwap);
+    vboxLayout->addWidget(mSystem);
+    vboxLayout->addWidget(mDLL);
+    vboxLayout->addWidget(mUPSystemOnly);
+    vboxLayout->addStretch(1);
+
+    setLayout(vboxLayout);
+}
+
+void GeneralWidget::update(win32pe::File *file)
+{
+    switch (file->fileHeader().machine()) {
+    case win32pe::FileHeader::i386:
+        mMachine->setText(tr("i386"));
+        break;
+    case win32pe::FileHeader::amd64:
+        mMachine->setText(tr("amd64"));
+        break;
+    default:
+        mMachine->setText(tr("unknown"));
+        break;
+    }
+
+    mTimestamp->setText(QDateTime::fromMSecsSinceEpoch(
+        static_cast<qint64>(file->fileHeader().timeDateStamp()) * 1000
+    ).toString(Qt::DefaultLocaleLongDate));
+
+    auto flags = file->fileHeader().characteristics();
+    mRelocsStripped->setChecked(flags & win32pe::FileHeader::RelocsStripped);
+    mExecutableImage->setChecked(flags & win32pe::FileHeader::ExecutableImage);
+    mLineNumsStripped->setChecked(flags & win32pe::FileHeader::LineNumsStripped);
+    mLocalSymsStripped->setChecked(flags & win32pe::FileHeader::LocalSymsStripped);
+    mLargeAddressAware->setChecked(flags & win32pe::FileHeader::LargeAddressAware);
+    mThirtyTwoBitMachine->setChecked(flags & win32pe::FileHeader::ThirtyTwoBitMachine);
+    mDebugStripped->setChecked(flags & win32pe::FileHeader::DebugStripped);
+    mRemovableRunFromSwap->setChecked(flags & win32pe::FileHeader::RemovableRunFromSwap);
+    mNetRunFromSwap->setChecked(flags & win32pe::FileHeader::NetRunFromSwap);
+    mSystem->setChecked(flags & win32pe::FileHeader::System);
+    mDLL->setChecked(flags & win32pe::FileHeader::DLL);
+    mUPSystemOnly->setChecked(flags & win32pe::FileHeader::UPSystemOnly);
+}

@@ -31,13 +31,18 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QTabWidget>
 #include <QToolBar>
 
 #include "mainwindow.h"
 
 MainWindow::MainWindow()
-    : mFile(nullptr)
+    : mFile(nullptr),
+      mGeneralWidget(new GeneralWidget),
+      mSectionsWidget(new SectionsWidget),
+      mImportsWidget(new ImportsWidget)
 {
+    resize(640, 480);
     setWindowTitle(tr("PE Deconstructor"));
 
     QAction *open = new QAction(QIcon::fromTheme("document-open"), tr("&Open"), this);
@@ -51,6 +56,13 @@ MainWindow::MainWindow()
 
     QToolBar *toolbar = addToolBar(tr("File"));
     toolbar->addAction(open);
+
+    QTabWidget *tabWidget = new QTabWidget;
+    tabWidget->addTab(mGeneralWidget, tr("&General"));
+    tabWidget->addTab(mSectionsWidget, tr("&Sections"));
+    tabWidget->addTab(mImportsWidget, tr("&Imports"));
+
+    setCentralWidget(tabWidget);
 }
 
 MainWindow::~MainWindow()
@@ -76,6 +88,8 @@ void MainWindow::openFile(const QString &filename)
         );
         return;
     }
+
+    mGeneralWidget->update(mFile);
 }
 
 void MainWindow::onOpenClicked()
