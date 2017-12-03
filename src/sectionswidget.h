@@ -25,7 +25,10 @@
 #ifndef SECTIONSWIDGET_H
 #define SECTIONSWIDGET_H
 
+#include <QListWidget>
 #include <QWidget>
+
+#include <win32pe/file.h>
 
 class SectionsWidget : public QWidget
 {
@@ -33,7 +36,13 @@ class SectionsWidget : public QWidget
 
 public:
 
-    //...
+    SectionsWidget();
+
+    void update(win32pe::File *file);
+
+private:
+
+    QListWidget *mSections;
 };
 
 #endif // SECTIONSWIDGET_H

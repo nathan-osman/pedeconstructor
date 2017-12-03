@@ -22,4 +22,32 @@
  * IN THE SOFTWARE.
  */
 
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
+#include <win32pe/section.h>
+
 #include "sectionswidget.h"
+
+SectionsWidget::SectionsWidget()
+    : mSections(new QListWidget)
+{
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+
+    // TODO: section information
+
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    hboxLayout->addWidget(mSections);
+    hboxLayout->addLayout(vboxLayout);
+
+    setLayout(hboxLayout);
+}
+
+void SectionsWidget::update(win32pe::File *file)
+{
+    mSections->clear();
+
+    for (auto it = file->sections().begin(); it != file->sections().end(); ++it) {
+        mSections->addItem(QString::fromStdString((*it).name()));
+    }
+}

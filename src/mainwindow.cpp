@@ -95,6 +95,7 @@ void MainWindow::openFile(const QString &filename)
     }
 
     mGeneralWidget->update(mFile);
+    mSectionsWidget->update(mFile);
 }
 
 void MainWindow::onOpenClicked()
