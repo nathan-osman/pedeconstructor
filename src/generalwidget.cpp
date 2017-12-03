@@ -23,7 +23,9 @@
  */
 
 #include <QDateTime>
+#include <QFrame>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QVBoxLayout>
 
@@ -47,6 +49,10 @@ GeneralWidget::GeneralWidget()
       mDLL(new QCheckBox(tr("Image is a DLL"))),
       mUPSystemOnly(new QCheckBox(tr("Run on uniprocessor system")))
 {
+    QFrame *frame = new QFrame;
+    frame->setFrameShape(QFrame::HLine);
+    frame->setFrameShadow(QFrame::Sunken);
+
     QGridLayout *gridLayout = new QGridLayout;
     gridLayout->addWidget(new QLabel(tr("Machine:")), 0, 0);
     gridLayout->addWidget(mMachine, 0, 1);
@@ -54,20 +60,30 @@ GeneralWidget::GeneralWidget()
     gridLayout->addWidget(mTimestamp, 1, 1);
     gridLayout->setColumnStretch(1, 1);
 
+    QVBoxLayout *col1Layout = new QVBoxLayout;
+    col1Layout->addWidget(mRelocsStripped);
+    col1Layout->addWidget(mExecutableImage);
+    col1Layout->addWidget(mLineNumsStripped);
+    col1Layout->addWidget(mLocalSymsStripped);
+    col1Layout->addWidget(mLargeAddressAware);
+    col1Layout->addWidget(mThirtyTwoBitMachine);
+
+    QVBoxLayout *col2Layout = new QVBoxLayout;
+    col2Layout->addWidget(mDebugStripped);
+    col2Layout->addWidget(mRemovableRunFromSwap);
+    col2Layout->addWidget(mNetRunFromSwap);
+    col2Layout->addWidget(mSystem);
+    col2Layout->addWidget(mDLL);
+    col2Layout->addWidget(mUPSystemOnly);
+
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    hboxLayout->addLayout(col1Layout);
+    hboxLayout->addLayout(col2Layout);
+
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     vboxLayout->addLayout(gridLayout);
-    vboxLayout->addWidget(mRelocsStripped);
-    vboxLayout->addWidget(mExecutableImage);
-    vboxLayout->addWidget(mLineNumsStripped);
-    vboxLayout->addWidget(mLocalSymsStripped);
-    vboxLayout->addWidget(mLargeAddressAware);
-    vboxLayout->addWidget(mThirtyTwoBitMachine);
-    vboxLayout->addWidget(mDebugStripped);
-    vboxLayout->addWidget(mRemovableRunFromSwap);
-    vboxLayout->addWidget(mNetRunFromSwap);
-    vboxLayout->addWidget(mSystem);
-    vboxLayout->addWidget(mDLL);
-    vboxLayout->addWidget(mUPSystemOnly);
+    vboxLayout->addWidget(frame);
+    vboxLayout->addLayout(hboxLayout);
     vboxLayout->addStretch(1);
 
     setLayout(vboxLayout);
