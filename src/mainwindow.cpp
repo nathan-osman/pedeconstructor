@@ -24,6 +24,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QDir>
 #include <QFileDialog>
 #include <QIcon>
@@ -31,6 +32,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QRect>
 #include <QTabWidget>
 #include <QToolBar>
 
@@ -42,7 +44,6 @@ MainWindow::MainWindow()
       mSectionsWidget(new SectionsWidget),
       mImportsWidget(new ImportsWidget)
 {
-    resize(640, 480);
     setWindowTitle(tr("PE Deconstructor"));
 
     QAction *open = new QAction(QIcon::fromTheme("document-open"), tr("&Open"), this);
@@ -63,6 +64,10 @@ MainWindow::MainWindow()
     tabWidget->addTab(mImportsWidget, tr("&Imports"));
 
     setCentralWidget(tabWidget);
+
+    QRect rect = geometry();
+    rect.moveCenter(QApplication::desktop()->screenGeometry().center());
+    setGeometry(rect);
 }
 
 MainWindow::~MainWindow()
