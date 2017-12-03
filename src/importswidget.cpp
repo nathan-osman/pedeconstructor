@@ -22,4 +22,30 @@
  * IN THE SOFTWARE.
  */
 
+#include <QTreeWidgetItem>
+#include <QVBoxLayout>
+
+#include <win32pe/importtable.h>
+
 #include "importswidget.h"
+
+ImportsWidget::ImportsWidget()
+    : mImports(new QTreeWidget)
+{
+    mImports->setHeaderLabel(tr("Name"));
+
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    vboxLayout->addWidget(mImports);
+    setLayout(vboxLayout);
+}
+
+void ImportsWidget::update(win32pe::File *file)
+{
+    mImports->clear();
+
+    for (auto it = file->importTable().items().begin();
+            it != file->importTable().items().end(); ++it) {
+        QString name = QString::fromStdString(file->string((*it).name));
+        mImports->addTopLevelItem(new QTreeWidgetItem({name}));
+    }
+}

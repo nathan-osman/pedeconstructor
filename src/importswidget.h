@@ -25,7 +25,10 @@
 #ifndef IMPORTSWIDGET_H
 #define IMPORTSWIDGET_H
 
+#include <QTreeWidget>
 #include <QWidget>
+
+#include <win32pe/file.h>
 
 class ImportsWidget : public QWidget
 {
@@ -33,7 +36,13 @@ class ImportsWidget : public QWidget
 
 public:
 
-    //...
+    ImportsWidget();
+
+    void update(win32pe::File *file);
+
+private:
+
+    QTreeWidget *mImports;
 };
 
 #endif // IMPORTSWIDGET_H
