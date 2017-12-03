@@ -1,6 +1,6 @@
 ## PE Deconstructor
 
-This application acts as a simple view for Win32 PE files.
+This application acts as a simple viewer for Win32 PE files.
 
 ### Screenshot
 
